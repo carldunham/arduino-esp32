@@ -16,6 +16,7 @@
 #define ESP_SPI_FLASH_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include "esp_err.h"
 #include "sdkconfig.h"
@@ -74,32 +75,46 @@ esp_err_t spi_flash_erase_range(size_t start_address, size_t size);
 /**
  * @brief  Write data to Flash.
  *
- * @note Address in flash, dest, has to be 4-byte aligned.
- *       This is a temporary limitation which will be removed.
  * @note If source address is in DROM, this function will return
  *       ESP_ERR_INVALID_ARG.
  *
- * @param  dest  destination address in Flash
- * @param  src   pointer to the source buffer
- * @param  size  length of data, in bytes
+ * @param  dest_addr destination address in Flash. Must be a multiple of 4 bytes.
+ * @param  src       pointer to the source buffer.
+ * @param  size      length of data, in bytes. Must be a multiple of 4 bytes.
  *
  * @return esp_err_t
  */
-esp_err_t spi_flash_write(size_t dest, const void *src, size_t size);
+esp_err_t spi_flash_write(size_t dest_addr, const void *src, size_t size);
+
+
+/**
+ * @brief  Write data encrypted to Flash.
+ *
+ * @note Flash encryption must be enabled for this function to work.
+ *
+ * @note Address in flash, dest, has to be 32-byte aligned.
+ *
+ * @note If source address is in DROM, this function will return
+ *       ESP_ERR_INVALID_ARG.
+ *
+ * @param  dest_addr destination address in Flash. Must be a multiple of 32 bytes.
+ * @param  src       pointer to the source buffer.
+ * @param  size      length of data, in bytes. Must be a multiple of 32 bytes.
+ *
+ * @return esp_err_t
+ */
+esp_err_t spi_flash_write_encrypted(size_t dest_addr, const void *src, size_t size);
 
 /**
  * @brief  Read data from Flash.
  *
- * @note Both src and dest have to be 4-byte aligned.
- *       This is a temporary limitation which will be removed.
- *
- * @param  src   source address of the data in Flash.
- * @param  dest  pointer to the destination buffer
- * @param  size  length of data
+ * @param  src_addr source address of the data in Flash.
+ * @param  dest     pointer to the destination buffer
+ * @param  size     length of data
  *
  * @return esp_err_t
  */
-esp_err_t spi_flash_read(size_t src, void *dest, size_t size);
+esp_err_t spi_flash_read(size_t src_addr, void *dest, size_t size);
 
 /**
  * @brief Enumeration which specifies memory space requested in an mmap call
@@ -134,7 +149,7 @@ typedef uint32_t spi_flash_mmap_handle_t;
  *
  * @return  ESP_OK on success, ESP_ERR_NO_MEM if pages can not be allocated
  */
-esp_err_t spi_flash_mmap(uint32_t src_addr, size_t size, spi_flash_mmap_memory_t memory,
+esp_err_t spi_flash_mmap(size_t src_addr, size_t size, spi_flash_mmap_memory_t memory,
                          const void** out_ptr, spi_flash_mmap_handle_t* out_handle);
 
 /**
