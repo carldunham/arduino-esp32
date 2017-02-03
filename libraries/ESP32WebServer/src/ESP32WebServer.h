@@ -1,5 +1,5 @@
 /*
-  ESP8266WebServer.h - Dead simple web-server.
+  ESP32WebServer.h - Dead simple web-server.
   Supports only one simultaneous client, knows how to handle GET and POST.
 
   Copyright (c) 2014 Ivan Grokhotkov. All rights reserved.
@@ -21,11 +21,11 @@
 */
 
 
-#ifndef ESP8266WEBSERVER_H
-#define ESP8266WEBSERVER_H
+#ifndef ESP32WEBSERVER_H
+#define ESP32WEBSERVER_H
 
 #include <functional>
-#include <ESP8266WiFi.h>
+#include <ESP32WiFi.h>
 
 enum HTTPMethod { HTTP_ANY, HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_PATCH, HTTP_DELETE, HTTP_OPTIONS };
 enum HTTPUploadStatus { UPLOAD_FILE_START, UPLOAD_FILE_WRITE, UPLOAD_FILE_END,
@@ -42,7 +42,7 @@ enum HTTPClientStatus { HC_NONE, HC_WAIT_READ, HC_WAIT_CLOSE };
 #define CONTENT_LENGTH_UNKNOWN ((size_t) -1)
 #define CONTENT_LENGTH_NOT_SET ((size_t) -2)
 
-class ESP8266WebServer;
+class ESP32WebServer;
 
 typedef struct {
   HTTPUploadStatus status;
@@ -60,12 +60,12 @@ namespace fs {
 class FS;
 }
 
-class ESP8266WebServer
+class ESP32WebServer
 {
 public:
-  ESP8266WebServer(IPAddress addr, int port = 80);
-  ESP8266WebServer(int port = 80);
-  ~ESP8266WebServer();
+  ESP32WebServer(IPAddress addr, int port = 80);
+  ESP32WebServer(int port = 80);
+  ~ESP32WebServer();
 
   void begin();
   void handleClient();
@@ -181,4 +181,4 @@ protected:
 };
 
 
-#endif //ESP8266WEBSERVER_H
+#endif //ESP32WEBSERVER_H
